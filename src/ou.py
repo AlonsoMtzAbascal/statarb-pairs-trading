@@ -1,24 +1,3 @@
-"""
-Ornstein-Uhlenbeck modeling of the spread.
-
-The spread of a cointegrated pair mean-reverts, and the OU process is the
-canonical continuous-time model of mean reversion:
-
-    ds_t = kappa (mu - s_t) dt + sigma dW_t
-
-Its most useful summary is the HALF-LIFE of mean reversion, ln(2)/kappa -- the
-expected time for a deviation to decay halfway back to the mean. The half-life
-tells you the natural holding period of the trade and lets you size entries and
-exits off the process's own timescale, instead of picking an arbitrary "enter at
-2 sigma, exit at 0".
-
-Estimation is by the exact discrete equivalent of OU, which is an AR(1):
-
-    s_{t+1} = a + b s_t + eps,   with  b = exp(-kappa dt).
-
-Regressing s_{t+1} on s_t gives b, and hence kappa = -ln(b)/dt and
-half_life = ln(2)/kappa = -ln(2)/ln(b).
-"""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -38,11 +17,6 @@ class OUFit:
 
 
 def fit_ou(spread, dt: float = 1.0) -> OUFit:
-    """Fit an OU process to a spread series by AR(1) regression.
-
-    Returns an OUFit; half_life is NaN if the series is not mean-reverting
-    (estimated b >= 1), which is itself a useful diagnostic.
-    """
     s = np.asarray(spread, dtype=float)
     s = s[~np.isnan(s)]
     s_t, s_next = s[:-1], s[1:]
