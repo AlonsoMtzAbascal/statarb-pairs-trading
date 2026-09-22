@@ -1,8 +1,3 @@
-"""Shared configuration for the pairs-trading experiments.
-
-Centralises the data seed, the strategy parameters, and the plot style so every
-figure and table is mutually consistent and reproducible.
-"""
 from __future__ import annotations
 
 import os
@@ -12,7 +7,6 @@ import matplotlib as mpl
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 
-# --- reproducibility & strategy defaults -------------------------------------
 DATA_SEED = 7
 STRAT = dict(
     delta=1e-9,        # Kalman process noise (slow-drift tracking)
@@ -22,14 +16,12 @@ STRAT = dict(
     cost_bps=1.0,      # per-trade transaction cost in basis points
 )
 
-# --- paths -------------------------------------------------------------------
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FIG_DIR = os.path.join(ROOT, "figures")
 RESULTS_DIR = os.path.join(ROOT, "results")
 os.makedirs(FIG_DIR, exist_ok=True)
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
-# --- plot style --------------------------------------------------------------
 NAVY = "#1f3b57"
 TEAL = "#2a9d8f"
 AMBER = "#e9a13b"
