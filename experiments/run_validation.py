@@ -1,21 +1,3 @@
-"""
-Experiment 1 -- Validation against known ground truth.
-
-Before trusting any strategy result, prove the machinery recovers what is known.
-The synthetic universe was built with a KNOWN answer: three genuinely
-cointegrated pairs (one with a deliberately time-varying hedge ratio) hidden
-among independent decoys. This script checks three recoveries:
-
-  (a) Cointegration screening ranks the true pairs at the top.
-  (b) The Kalman filter recovers the true time-varying hedge-ratio path.
-  (c) The OU fit recovers the true mean-reversion half-lives -- and correctly
-      flags the time-varying pair as non-stationary under a STATIC hedge, which
-      is the direct demonstration of why the dynamic hedge is needed.
-
-This is the pairs-trading analogue of validating a Monte Carlo pricer against a
-closed form: methods you cannot check against a known answer cannot be trusted
-on real data.
-"""
 from __future__ import annotations
 
 import os
@@ -37,7 +19,6 @@ def main():
     prices, truth = data.generate_synthetic_universe(seed=C.DATA_SEED)
     true_pairs = set(truth.cointegrated_pairs)
 
-    # --- (a) cointegration screen -------------------------------------------
     screen = cointegration.screen_pairs(prices)
     screen["is_true_pair"] = [
         (a, b) in true_pairs or (b, a) in true_pairs
@@ -56,7 +37,6 @@ def main():
     lines.append(f"True pairs in top 3 by p-value: {n_true_top3}/3")
     print("\n".join(lines))
 
-    # --- (b) Kalman hedge recovery on the time-varying pair -----------------
     tv_pair = next(p for p in truth.cointegrated_pairs if truth.time_varying[p])
     a, b = tv_pair
     kf = kalman.kalman_hedge(prices[a], prices[b], delta=C.STRAT["delta"])
@@ -67,7 +47,6 @@ def main():
     print(f"  true beta: {true_beta.iloc[0]:.3f} -> {true_beta.iloc[-1]:.3f};  "
           f"corr(estimated, true) = {corr:.3f}")
 
-    # --- (c) OU half-life recovery on the static-hedge spread ---------------
     print("\nOU half-life recovery (static Engle-Granger spread):")
     ou_lines = []
     for pair in truth.cointegrated_pairs:
@@ -91,7 +70,6 @@ def main():
         f.write("OU half-life recovery (static-hedge spread):\n")
         f.write("\n".join(ou_lines) + "\n")
 
-    # --- figure --------------------------------------------------------------
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4.4))
 
     ax1.plot(prices.index, true_beta, color=C.NAVY, lw=2.2, label="true beta_t")
