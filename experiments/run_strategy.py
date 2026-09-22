@@ -1,15 +1,3 @@
-"""
-Experiment 2 -- The strategy, end to end, with an honest benchmark.
-
-Runs the full pipeline on the most strongly cointegrated pair: Kalman dynamic
-hedge -> causal spread -> rolling z-score signal -> backtest with transaction
-costs. It reports the standard performance summary and, crucially, benchmarks
-the dynamic-hedge strategy against the naive STATIC-hedge version, so the
-marginal value of the sophistication is visible rather than assumed.
-
-Outputs: an equity curve (dynamic vs static), and the spread with its trading
-bands and realised entries/exits.
-"""
 from __future__ import annotations
 
 import os
@@ -55,7 +43,6 @@ def main():
     ou_fit = ou.fit_ou((prices[a] - (eg["hedge_ratio"] * prices[b]
                                      + eg["intercept"])).values)
 
-    # The dynamic hedge's value shows on the pair whose true hedge DRIFTS.
     tv = next(p for p in truth.cointegrated_pairs if truth.time_varying[p])
     ta, tb = tv
     bt_tvk, *_ = run_pair(prices, ta, tb, use_kalman=True)
@@ -88,11 +75,9 @@ def main():
     with open(f"{C.RESULTS_DIR}/strategy.txt", "w") as f:
         f.write("\n".join(lines) + "\n")
 
-    # --- figure (3 panels) ---------------------------------------------------
     fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(9, 9.5),
                                         gridspec_kw={"height_ratios": [1, 1, 1]})
 
-    # (1) headline pair equity: dynamic vs static (a wash -- constant hedge)
     ax1.plot(bt_k.equity.index, bt_k.equity, color=C.TEAL, lw=1.6,
              label=f"Dynamic hedge (Sharpe {sk['sharpe']:.2f})")
     ax1.plot(bt_s.equity.index, bt_s.equity, color=C.GREY, lw=1.3, ls="--",
@@ -102,7 +87,6 @@ def main():
     ax1.set_title(f"Headline pair {a}/{b} (constant hedge): dynamic == static")
     ax1.legend(loc="upper left")
 
-    # (2) drifting pair equity: dynamic clearly beats static (Kalman value)
     ax2.plot(bt_tvk.equity.index, bt_tvk.equity, color=C.TEAL, lw=1.6,
              label=f"Dynamic hedge (Sharpe {tvk['sharpe']:.2f})")
     ax2.plot(bt_tvs.equity.index, bt_tvs.equity, color=C.CRIMSON, lw=1.3, ls="--",
@@ -112,7 +96,6 @@ def main():
     ax2.set_title(f"Drifting pair {ta}/{tb}: the dynamic hedge earns its keep")
     ax2.legend(loc="upper left")
 
-    # (3) signal mechanics on the headline pair
     entry, exit = C.STRAT["entry"], C.STRAT["exit"]
     ax3.plot(z.index, z, color=C.NAVY, lw=0.7, label="spread z-score")
     ax3.axhline(entry, color=C.CRIMSON, lw=1, ls="--", label=f"+/-{entry} entry")
