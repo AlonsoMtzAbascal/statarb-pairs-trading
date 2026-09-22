@@ -1,11 +1,3 @@
-"""
-Tests for the pairs-trading pipeline.
-
-Two kinds of check: (1) the methods recover the KNOWN ground truth baked into the
-synthetic data (cointegration ranking, hedge-ratio path, OU half-life), and
-(2) the backtest is causal -- a deliberate lookahead sanity check, because a
-backtest that peeks at the future is worse than useless. Run with `pytest -q`.
-"""
 import os
 import sys
 
@@ -69,11 +61,6 @@ def test_ou_half_life_recovered_on_constant_pairs(universe):
 
 
 def test_backtest_has_no_lookahead(universe):
-    """Perturbing prices ONLY after date t must not change returns up to t-1.
-
-    If the backtest peeked at the future, altering later prices would change
-    earlier PnL. It must not.
-    """
     prices, _ = universe
     a, b = "COINTA1", "COINTA2"
     kf = kalman.kalman_hedge(prices[a], prices[b])
