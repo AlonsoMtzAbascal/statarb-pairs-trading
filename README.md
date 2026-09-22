@@ -13,11 +13,10 @@ out-of-sample.
 
 ## The idea in one paragraph
 
-Two assets are *cointegrated* if some linear combination of their (individually
-random-walking) prices is stationary — a spread that keeps reverting to a mean.
+Two assets are cointegrated if some linear combination of their (individually
+random-walking) prices is stationary.
 When the spread stretches unusually far, you bet on it snapping back: short the
-rich leg, long the cheap one, and unwind as it reverts. The hard parts are not
-the trade but the honesty: estimating the hedge ratio without peeking at the
+rich leg, long the cheap one, and unwind as it reverts. The hard part is estimating the hedge ratio without peeking at the
 future, and deciding whether an edge that survived a search over many pairs is
 actually there.
 
