@@ -1,16 +1,3 @@
-"""
-Experiment 5 -- Out-of-sample selection (walk-forward).
-
-The deadliest bias in a pairs backtest is selecting the pair on the same data
-used to score it. Here selection is made OUT of sample: on each roll, pairs are
-chosen using only a past formation window, then traded -- untouched -- over the
-following window. Concatenating those untouched windows gives an honest track
-record, and comparing it to the in-sample performance on the same pairs shows
-how much of the in-sample edge was real versus fitted.
-
-A large in-sample / out-of-sample gap is the classic signature of overfitting;
-a modest gap means the selection generalises.
-"""
 from __future__ import annotations
 
 import os
@@ -55,8 +42,7 @@ def main():
     print("\n".join(lines))
     with open(f"{C.RESULTS_DIR}/walkforward.txt", "w") as f:
         f.write("\n".join(lines) + "\n")
-
-    # --- figure --------------------------------------------------------------
+    
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4.4),
                                    gridspec_kw={"width_ratios": [1.5, 1]})
 
