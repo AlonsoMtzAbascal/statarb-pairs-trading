@@ -1,21 +1,3 @@
-"""
-Experiment 4 -- Robustness: breakeven costs and parameter sensitivity.
-
-Two questions a serious reviewer always asks:
-
-  (1) At what transaction cost does the edge vanish? Pairs strategies trade
-      constantly, so costs -- not signal -- are often what kill them. We sweep
-      the per-trade cost and report the BREAKEVEN level (where annualised return
-      crosses zero). A strategy that only works at unrealistically low costs is
-      not a strategy.
-
-  (2) Is performance a smooth function of the parameters, or a knife-edge fit?
-      We sweep the entry z-threshold and the Kalman `delta`. Smooth, broad
-      plateaus indicate a robust effect; a lone sharp spike indicates overfitting
-      to the specific sample. The delta sweep also exposes the timescale-
-      separation tradeoff: too-large delta lets the hedge chase (and destroy) the
-      spread signal.
-"""
 from __future__ import annotations
 
 import os
@@ -49,11 +31,9 @@ def main():
     screen = cointegration.screen_pairs(prices)
     a, b = screen.iloc[0]["asset_a"], screen.iloc[0]["asset_b"]
 
-    # --- (1) breakeven cost --------------------------------------------------
     costs = np.linspace(0, 60, 31)                # basis points
     ann_returns = np.array([strat_metrics(prices, a, b, cost_bps=c)[1]
                             for c in costs])
-    # linear interpolation for the zero crossing
     breakeven = np.nan
     for i in range(len(costs) - 1):
         if ann_returns[i] >= 0 >= ann_returns[i + 1]:
@@ -63,7 +43,6 @@ def main():
     breakeven_str = (f"{breakeven:.1f} bps" if np.isfinite(breakeven)
                      else f">{costs[-1]:.0f} bps")
 
-    # --- (2) parameter sensitivity ------------------------------------------
     entries = np.arange(1.0, 3.26, 0.25)
     entry_sharpes = np.array([strat_metrics(prices, a, b, entry=e)[0]
                               for e in entries])
@@ -84,7 +63,6 @@ def main():
     with open(f"{C.RESULTS_DIR}/robustness.txt", "w") as f:
         f.write("\n".join(lines) + "\n")
 
-    # --- figure --------------------------------------------------------------
     fig, axes = plt.subplots(1, 3, figsize=(13.5, 4.2))
 
     axes[0].plot(costs, ann_returns * 100, "o-", color=C.NAVY, ms=4)
