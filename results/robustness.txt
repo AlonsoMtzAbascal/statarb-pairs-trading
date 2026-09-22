@@ -1,0 +1,5 @@
+Robustness on top pair COINTA1/COINTA2
+============================================================
+Breakeven transaction cost: >60 bps (edge survives up to this per-trade cost)
+Sharpe at entry in [1.5, 2.5]: 1.14 to 1.46 (flat => robust)
+Best delta region: 1e-9 to 1e-8 (larger delta -> hedge chases spread -> Sharpe falls)

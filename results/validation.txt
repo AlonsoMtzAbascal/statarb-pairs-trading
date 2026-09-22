@@ -1,0 +1,20 @@
+Cointegration screen (45 pairs), ranked by Engle-Granger p-value
+------------------------------------------------------------------
+pair                   EG p-value   Johansen   true?
+COINTA1/COINTA2          1.66e-13       True  <-- YES
+COINTC1/COINTC2          5.45e-05       True  <-- YES
+COINTA1/COINTB2          6.18e-03       True        
+COINTA1/COINTC2          9.48e-03       True        
+COINTA1/COINTB1          1.31e-02       True        
+COINTA1/COINTC1          1.33e-02       True        
+COINTA2/COINTC2          2.22e-02       True        
+COINTA2/COINTB2          2.33e-02      False        
+------------------------------------------------------------------
+True pairs in top 3 by p-value: 2/3
+
+Kalman time-varying hedge corr(estimated,true) = 0.994
+
+OU half-life recovery (static-hedge spread):
+  COINTA1/COINTA2   (constant    ): true=10d  est= 11.0d  ADF p=0.000
+  COINTB1/COINTB2   (time-varying): true=18d  est=283.3d  ADF p=0.315
+  COINTC1/COINTC2   (constant    ): true=30d  est= 31.5d  ADF p=0.000

@@ -1,0 +1,12 @@
+Strategy performance (transaction costs 1.0 bps)
+==============================================================================
+                            Sharpe  Sortino    AnnRet   AnnVol    MaxDD  Trades
+Top pair COINTA1/COINTA2 (constant hedge, OU half-life 11d):
+  Dynamic (Kalman)            1.15     1.12      6.9%     5.9%    -5.0%     120
+  Static (OLS hedge)          1.16     1.17      7.0%     6.0%    -4.7%     130
+Time-varying pair COINTB1/COINTB2 (drifting hedge):
+  Dynamic (Kalman)            1.03     0.82      5.9%     5.7%    -6.6%     111
+  Static (OLS hedge)          0.74     0.63      4.0%     5.5%    -7.6%     123
+------------------------------------------------------------------------------
+Dynamic-hedge Sharpe uplift: -0.01 on the constant pair (a wash, as it should be),
+                             +0.29 on the drifting pair (the Kalman filter earning its keep).

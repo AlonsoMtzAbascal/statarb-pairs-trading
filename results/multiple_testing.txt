@@ -1,0 +1,34 @@
+Multiple-testing analysis
+================================================================
+Pairs tested (trials)          : 45
+Best pair                      : COINTA1/COINTA2 (true cointegrated: True)
+Best annualised Sharpe         : 1.15
+
+Deflated Sharpe Ratio (Bailey & Lopez de Prado):
+  benchmark Sharpe from luck   : 0.74 (annualised, expected max of 45 zero-skill trials)
+  naive PSR vs 0 (no penalty)  : 1.000
+  DEFLATED Sharpe (vs luck)    : 0.910
+  verdict                      : borderline -- near-certain naively, but the trials penalty pulls it toward the 0.95 line
+
+Permutation / placebo test (decoy pairs as the null):
+  decoy Sharpe mean/max        : 0.09 / 0.64
+  empirical p-value            : 0.000
+
+Reading it: the naive PSR says the best pair is near-certainly better
+than zero -- but that ignores that it is the winner of 45 searches. The
+deflated Sharpe applies the trials penalty and tempers that confidence;
+the permutation test independently confirms the true pair beats every
+decoy. An edge that is real but modest, reported honestly rather than
+inflated by the selection that found it.
+
+Per-pair Sharpe ranking (top 10):
+  COINTA1/COINTA2    Sharpe=  1.15  true=True
+  COINTB1/COINTB2    Sharpe=  1.03  true=True
+  COINTA1/COINTC1    Sharpe=  0.64  true=False
+  COINTC1/COINTC2    Sharpe=  0.60  true=True
+  COINTB1/COINTC2    Sharpe=  0.45  true=False
+  COINTB1/INDEP4     Sharpe=  0.44  true=False
+  COINTA1/COINTC2    Sharpe=  0.40  true=False
+  COINTA1/COINTB1    Sharpe=  0.40  true=False
+  COINTA1/INDEP1     Sharpe=  0.36  true=False
+  COINTB1/COINTC1    Sharpe=  0.36  true=False
