@@ -2,8 +2,8 @@
 
 A cointegration-based pairs-trading strategy built around a single question:
 **is the backtested edge real, or an artefact of overfitting and multiple
-testing?** The strategy itself — Kalman-filtered dynamic hedge ratios,
-Ornstein–Uhlenbeck spread modeling, z-score mean-reversion signals — is
+testing?** The strategy itself (Kalman-filtered dynamic hedge ratios,
+Ornstein–Uhlenbeck spread modeling, z-score mean-reversion signals) is
 standard. What makes this project worth reading is the evaluation stack wrapped
 around it: every result is validated against known ground truth, corrected for
 the number of pairs searched, charged realistic transaction costs, and selected
