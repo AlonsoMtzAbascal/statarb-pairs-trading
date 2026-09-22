@@ -1,4 +1,4 @@
-# Statistical-Arbitrage Pairs Trading — with an honest edge
+# Statistical-Arbitrage Pairs Trading
 
 A cointegration-based pairs-trading strategy built around a single question:
 **is the backtested edge real, or an artefact of overfitting and multiple
