@@ -9,11 +9,6 @@ around it: every result is validated against known ground truth, corrected for
 the number of pairs searched, charged realistic transaction costs, and selected
 out-of-sample.
 
-The guiding principle is the one that separates a real strategy from a
-data-mined one: **not fooling yourself.** Searching hundreds of pairs for the
-best Sharpe is the same statistical problem as searching many sky positions for
-a signal — the look-elsewhere effect — and it demands the same discipline.
-
 ---
 
 ## The idea in one paragraph
