@@ -1,28 +1,3 @@
-"""
-Experiment 3 -- Not fooling yourself: the multiple-testing correction.
-
-This is the intellectual core of the project. When you backtest every pair in a
-universe and keep the best Sharpe, that Sharpe is inflated by selection: with
-enough candidates, something looks profitable by pure luck. Searching many pairs
-for the best Sharpe is the SAME statistics as searching many sky positions for a
-signal -- the look-elsewhere effect -- and the reported significance must be
-corrected for the number of trials.
-
-Two complementary corrections:
-
-  (1) Deflated Sharpe Ratio (Bailey & Lopez de Prado). Given the number of pairs
-      tested and the variance of their Sharpes, it computes the Sharpe the BEST
-      of that many zero-skill strategies would reach by luck, and asks whether
-      the observed Sharpe beats it (accounting for track length, skew, kurtosis).
-
-  (2) Permutation / placebo test. Trade every DECOY pair (independent random
-      walks, cointegrated with nothing) with the identical pipeline to build the
-      null distribution of Sharpes achievable by luck, then locate the true
-      pair's Sharpe within it for an empirical p-value.
-
-If the true pair's edge survives both, it is unlikely to be a data-mining
-artefact; the decoys that sneak past the raw cointegration screen do not.
-"""
 from __future__ import annotations
 
 import os
@@ -58,7 +33,6 @@ def main():
     prices, truth = data.generate_synthetic_universe(seed=C.DATA_SEED)
     true_pairs = {frozenset(p) for p in truth.cointegrated_pairs}
 
-    # --- Sharpe of every pair -----------------------------------------------
     all_pairs = list(combinations(prices.columns, 2))
     rows = []
     for a, b in all_pairs:
@@ -76,12 +50,10 @@ def main():
         n_obs=len(r_best), skew=float(skew(r_best)),
         kurt=float(kurtosis(r_best, fisher=False)))
 
-    # naive PSR against zero (no multiple-testing penalty) for contrast
     psr0 = metrics.probabilistic_sharpe_ratio(
         best["sharpe_pp"], 0.0, len(r_best), float(skew(r_best)),
         float(kurtosis(r_best, fisher=False)))
 
-    # --- permutation / placebo test on decoy pairs --------------------------
     decoy_sharpes = [row["sharpe"] for _, row in df.iterrows()
                      if not row["is_true"]]
     decoy_sharpes = np.array(decoy_sharpes)
@@ -131,7 +103,6 @@ def main():
             f.write(f"  {row['a']}/{row['b']:<10} Sharpe={row['sharpe']:6.2f}"
                     f"  true={row['is_true']}\n")
 
-    # --- figure --------------------------------------------------------------
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4.4))
 
     true_sh = df[df["is_true"]]["sharpe"].values
